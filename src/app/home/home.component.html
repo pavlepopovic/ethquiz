@@ -1,0 +1,29 @@
+<mat-card >
+  <mat-card-title>Hello from EthQuiz!</mat-card-title>
+  <mat-card-content *ngIf = '!isLoggedIn'>To continue, please log in...</mat-card-content>
+
+  <div *ngIf="isLoggedIn">
+    <mat-card-subtitle>Welcome, {{loggedInUser.email}}</mat-card-subtitle>
+    <mat-card-content>You have {{loggedInUser.tokenCount}} tokens</mat-card-content>
+
+    <mat-card-content class='mat-body-1'>Ticket for each match costs 20 tokens</mat-card-content>
+    <button mat-raised-button color="primary" (click)='processFindMatchButton()'>{{getButtonText()}}</button>
+    <div class='spinner-wrapper' *ngIf="findingMatchStatus == findingMatchStatusEnum.Finding">
+      <mat-card-content class='mat-body-1'>Please wait...</mat-card-content>
+      <mat-spinner [diameter]="15"></mat-spinner>
+    </div>
+    <div *ngIf="findingMatchStatus == findingMatchStatusEnum.Found && retrievedResults == false">
+      <ul>
+        <li *ngFor="let question of questions; let indexOfElement = index">
+          <mat-checkbox [(ngModel)] = 'userAnswers[indexOfElement]' [disabled]="hasSubmitedQuestions">
+            {{question}}
+          </mat-checkbox>
+        </li>
+      </ul>
+      <button mat-raised-button color="primary" (click)="answerQuestions()" [disabled]="hasSubmitedQuestions">Answer the questions</button>
+    </div>
+    <div *ngIf="retrievedResults">
+      <mat-card-content class='mat-body-1'>You answered {{numCorrectAnswers}}/5 correct questions.</mat-card-content>
+    </div>
+  </div>
+</mat-card>
